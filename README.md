@@ -36,6 +36,3 @@
 
 <br/>
 
-## 您的支持将鼓励我继续创作
-
-<img src="./screenshot/二维码.png"/>

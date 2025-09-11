@@ -6,6 +6,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:svg="clr-namespace:Avalonia.Svg.Skia;assembly=Avalonia.Svg.Skia"
     CanResize="True"
+	DragDrop.AllowDrop="True"
     Icon="/assets/ico.ico"
     KeyDown="Window_KeyDown"
     Opened="Window_Opened"
@@ -13,7 +14,7 @@
     SizeToContent="WidthAndHeight"
     mc:Ignorable="d">
 
-    <Grid Background="White">
+    <Grid Background="White" PointerPressed="TitleBar_PointerPressed">
         <ScrollViewer
             Margin="50"
             HorizontalScrollBarVisibility="Hidden"

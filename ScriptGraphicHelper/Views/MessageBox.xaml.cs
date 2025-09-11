@@ -64,7 +64,7 @@ namespace ScriptGraphicHelper.Views
             tb.Text = this.Message;
 
 
-            this.MaxWidth = this.Screens.Primary.WorkingArea.Width * 0.9;
+            this.MaxWidth = this.Screens.Primary.WorkingArea.Width * 0.7;
             this.MaxHeight = this.Screens.Primary.WorkingArea.Height * 0.8;
 
             tb.MaxWidth = this.MaxWidth - 100;
@@ -89,7 +89,17 @@ namespace ScriptGraphicHelper.Views
         {
             if (e.Property.Name == "Width" || e.Property.Name == "Height")
             {
-                this.Position = new PixelPoint((int)(this.Screens.Primary.WorkingArea.Width / 2 - this.Width / 2), (int)(this.Screens.Primary.WorkingArea.Height / 2 - this.Height / 2));
+                this.Position = new PixelPoint((int)(this.Screens.Primary.WorkingArea.Width / 2 - this.Width / 2), 
+                    (int)(this.Screens.Primary.WorkingArea.Height / 2 - this.Height / 2));
+                int i = 1;
+            }
+        }
+
+        private void TitleBar_PointerPressed(object sender, PointerPressedEventArgs e)
+        {
+            if (e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
+            {
+                BeginMoveDrag(e);
             }
         }
     }
