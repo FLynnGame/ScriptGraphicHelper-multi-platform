@@ -205,18 +205,19 @@ namespace ScriptGraphicHelper.ViewModels
 
         public ICommand Img_PointerLeave => new Command((param) => this.Loupe_IsVisible = false);
 
+        // 点击模式配置，首先这里触发
         public ICommand GetList => new Command(async (param) =>
         {
             if (ScreenshotHelperBridge.Select != -1)
             {
-                var list = await ScreenshotHelperBridge.Helpers[ScreenshotHelperBridge.Select].GetList();
-                var temp = new ObservableCollection<string>();
-                foreach (var item in list)
-                {
-                    temp.Add(item.Value);
-                }
-                ScreenshotHelperBridge.Info = list;
-                this.EmulatorInfo = temp;
+                //var list = await ScreenshotHelperBridge.Helpers[ScreenshotHelperBridge.Select].GetList();
+                //var temp = new ObservableCollection<string>();
+                //foreach (var item in list)
+                //{
+                //    temp.Add(item.Value);
+                //}
+                //ScreenshotHelperBridge.Info = list;
+                this.EmulatorInfo = ScreenshotHelperBridge.Init();
             }
         });
 

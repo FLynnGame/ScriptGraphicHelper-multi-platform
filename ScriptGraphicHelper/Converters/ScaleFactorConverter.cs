@@ -1,13 +1,18 @@
-﻿using Avalonia.Data.Converters;
+﻿using Avalonia.Controls;
+using Avalonia.Data.Converters;
 using System;
 using System.Globalization;
 
 namespace ScriptGraphicHelper.Converters
 {
-    class ScaleFactorConverter : IValueConverter
+    public class ScaleFactorConverter : IValueConverter
     {
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
+            // 设计器模式下返回默认值
+            if (Design.IsDesignMode)
+                return 7;
+
             if (value is null)
             {
                 return null;
@@ -33,6 +38,9 @@ namespace ScriptGraphicHelper.Converters
         }
         public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
+            if (Design.IsDesignMode)
+                return 1.0; // 设计器默认值
+
             if (value is null)
             {
                 return null;

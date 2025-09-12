@@ -42,7 +42,16 @@ namespace ScriptGraphicHelper.Views
 
         private void Window_Opened(object sender, EventArgs e)
         {
+            // 添加空值检查
+            //if (this.DataContext is MainWindowViewModel viewModel && viewModel.DropImage_Event != null)
+            {
+               // AddHandler(DragDrop.DropEvent, viewModel.DropImage_Event);
+            }
             AddHandler(DragDrop.DropEvent, (this.DataContext as MainWindowViewModel).DropImage_Event);
+
+            // 确保 PlatformImpl 不为 null
+            if (this.PlatformImpl?.Handle == null)
+                return;
             this.Handle = this.PlatformImpl.Handle.Handle;
             this.ClientSize = new Size(Settings.Instance.Width, Settings.Instance.Height);
             this.Timer.Tick += new EventHandler(HintMessage_Closed);

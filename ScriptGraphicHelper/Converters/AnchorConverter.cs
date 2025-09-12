@@ -1,4 +1,5 @@
-﻿using Avalonia.Data.Converters;
+﻿using Avalonia.Controls;
+using Avalonia.Data.Converters;
 using System;
 using System.Globalization;
 
@@ -11,10 +12,14 @@ namespace ScriptGraphicHelper.Converters
         Center = 2,
         Right = 3,
     }
-    class AnchorConverter : IValueConverter
+    public class AnchorConverter : IValueConverter
     {
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
+            // 设计器模式下返回默认值
+            if (Design.IsDesignMode)
+                return 1; // 返回 Left 对应的索引
+
             if (value is null)
             {
                 return null;
@@ -32,6 +37,10 @@ namespace ScriptGraphicHelper.Converters
 
         public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
+            // 设计器模式下返回默认值
+            if (Design.IsDesignMode)
+                return AnchorMode.Left;
+
             if (value is null)
             {
                 return null;

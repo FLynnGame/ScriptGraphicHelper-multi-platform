@@ -4,8 +4,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:cv="using:ScriptGraphicHelper.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:i="using:Avalonia.Xaml.Interactivity"
-    xmlns:ic="using:Avalonia.Xaml.Interactions.Core"
+	xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+    xmlns:ic="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
     xmlns:icc="using:ScriptGraphicHelper.ViewModels.Core"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="图像编辑"
@@ -19,8 +19,8 @@
     mc:Ignorable="d">
 
     <Window.Resources>
-        <cv:_Color2HexConverter x:Key="_color2Hex" />
-        <cv:_Color2BrushConverter x:Key="_color2Brush" />
+        <cv:Color2HexConverter x:Key="color2Hex" />
+		<cv:NewColor2BrushConverter x:Key="color2Brush" />
     </Window.Resources>
 
     <Grid Background="#2d2d30">
@@ -69,7 +69,7 @@
                     Margin="0,3,0,0"
                     Stretch="Uniform">
                     <Canvas Width="48" Height="48">
-                        <Path Data="M24 44C29.9601 44 26.3359 35.136 30 31C33.1264 27.4709 44 29.0856 44 24C44 12.9543 35.0457 4 24 4C12.9543 4 4 12.9543 4 24C4 35.0457 12.9543 44 24 44Z" Fill="{Binding SrcColor, Mode=TwoWay, Converter={StaticResource _color2Brush}}" />
+                        <Path Data="M24 44C29.9601 44 26.3359 35.136 30 31C33.1264 27.4709 44 29.0856 44 24C44 12.9543 35.0457 4 24 4C12.9543 4 4 12.9543 4 24C4 35.0457 12.9543 44 24 44Z" Fill="{Binding SrcColor, Mode=TwoWay, Converter={StaticResource color2Brush}}" />
                         <Path
                             Data="M28 17C29.6569 17 31 15.6569 31 14C31 12.3431 29.6569 11 28 11C26.3431 11 25 12.3431 25 14C25 15.6569 26.3431 17 28 17Z"
                             Fill="#333333"
@@ -98,7 +98,7 @@
                         BorderBrush="#666666"
                         BorderThickness="0"
                         FontSize="12"
-                        Text="{Binding SrcColor, Mode=TwoWay, Converter={StaticResource _color2Hex}}" />
+                        Text="{Binding SrcColor, Mode=TwoWay, Converter={StaticResource color2Hex}}" />
                 </Border>
             </StackPanel>
 
@@ -112,7 +112,7 @@
                     Margin="0,3,0,0"
                     Stretch="Uniform">
                     <Canvas Width="48" Height="48">
-                        <Path Data="M24 44C29.9601 44 26.3359 35.136 30 31C33.1264 27.4709 44 29.0856 44 24C44 12.9543 35.0457 4 24 4C12.9543 4 4 12.9543 4 24C4 35.0457 12.9543 44 24 44Z" Fill="{Binding DestColor, Mode=TwoWay, Converter={StaticResource _color2Brush}}" />
+                        <Path Data="M24 44C29.9601 44 26.3359 35.136 30 31C33.1264 27.4709 44 29.0856 44 24C44 12.9543 35.0457 4 24 4C12.9543 4 4 12.9543 4 24C4 35.0457 12.9543 44 24 44Z" Fill="{Binding DestColor, Mode=TwoWay, Converter={StaticResource color2Brush}}" />
                         <Path
                             Data="M28 17C29.6569 17 31 15.6569 31 14C31 12.3431 29.6569 11 28 11C26.3431 11 25 12.3431 25 14C25 15.6569 26.3431 17 28 17Z"
                             Fill="#333333"
@@ -141,7 +141,7 @@
                         BorderBrush="#666666"
                         BorderThickness="0"
                         FontSize="12"
-                        Text="{Binding DestColor, Mode=TwoWay, Converter={StaticResource _color2Hex}}" />
+                        Text="{Binding DestColor, Mode=TwoWay, Converter={StaticResource color2Hex}}" />
                 </Border>
             </StackPanel>
             <Slider
