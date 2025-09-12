@@ -18,9 +18,23 @@ namespace ScriptGraphicHelper.Models
     {
         public static LinkState State { get; set; } = LinkState.None;
         public static ObservableCollection<string> Result { get; set; } = new ObservableCollection<string>();
+
+        // 产生的链接
+        // [0] = {[0, 192.168.110.169:39947]}
         public static List<KeyValuePair<int, string>> Info { get; set; } = new List<KeyValuePair<int, string>>();
+
+        // 选择的列表，选中对应的Select下标就是多少 Adb连接，值就为5
+        //雷电模拟器3.0
+        //雷电模拟器4.0
+        //雷电模拟器64
+        //雷神模拟器
+        //大漠句柄
+        //Adb连接
+        //AJ连接
+        //AT连接
         public static int Select { get; set; } = -1;
 
+        // 产生的第几个链接？
         private static int _index = -1;
         public static int Index
         {
@@ -65,7 +79,7 @@ namespace ScriptGraphicHelper.Models
                     Result.Add(emulator.Name);
                 }
             }
-            State = 0;
+            State = LinkState.Waiting;
             return Result;
 
         }

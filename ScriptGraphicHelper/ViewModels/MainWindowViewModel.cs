@@ -232,9 +232,9 @@ namespace ScriptGraphicHelper.ViewModels
                 else if (ScreenshotHelperBridge.State == LinkState.Waiting)
                 {
                     this.WindowCursor = new Cursor(StandardCursorType.Wait);
-                    ScreenshotHelperBridge.Changed(value);
+                    ScreenshotHelperBridge.Changed(value); // 切换状态为LinkState.Starting
                     this.EmulatorInfo = await ScreenshotHelperBridge.Initialize();
-                    this.EmulatorSelectedIndex = -1;
+                    this.EmulatorSelectedIndex = -1; // 调用自己，切换状态为success？
 
                     ScreenshotHelperBridge.Helpers[ScreenshotHelperBridge.Select].OnSuccessed = new Action<Bitmap>((bitmap) =>
                     {
@@ -262,6 +262,7 @@ namespace ScriptGraphicHelper.ViewModels
                 else if (ScreenshotHelperBridge.State == LinkState.Starting)
                 {
                     ScreenshotHelperBridge.State = LinkState.success;
+                    this.EmulatorSelectedIndex = 0; // 先写死获取第一个链接
                 }
             }
             catch (Exception e)
