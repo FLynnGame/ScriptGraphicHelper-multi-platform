@@ -4,6 +4,7 @@ using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,8 +13,10 @@ namespace ScriptGraphicHelper.Models.ScreenshotHelpers
 {
     class AdbHelper : BaseHelper
     {
-        public override Action<Bitmap>? OnSuccessed { get; set; }
+        public override Action<Avalonia.Media.Imaging.Bitmap>? OnSuccessed { get; set; }
         public override Action<string>? OnFailed { get; set; }
+        public override Action<string>? OnConnected { get; set; }
+        public override Action<string>? OnConnectFailed { get; set; }
         public override string Path { get; } = AppDomain.CurrentDomain.BaseDirectory.Replace("\\", "/") + "assets/adb/";
         public override string Name { get; } = "Adb连接";
 
@@ -40,7 +43,20 @@ namespace ScriptGraphicHelper.Models.ScreenshotHelpers
 
             if (result != null)
             {
-                PipeCmd("connect " + result.Value.Item1 + ":" + result.Value.Item2);
+                var strResult = PipeCmd("connect " + result.Value.Item1 + ":" + result.Value.Item2);
+                if (strResult.Contains("connected"))
+                {
+                    // adb连接成功
+                    MessageBox.ShowAsync("adb连接成功");
+                    this.OnConnected?.Invoke(strResult);
+                }
+                else if(strResult.Contains("cannot"))
+                {
+                    // adb连接失败
+                    MessageBox.ShowAsync("adb连接失败");
+                    this.OnConnectFailed?.Invoke(strResult);
+                }
+               // MessageBox.ShowAsync("adb连接信息", strResult);
             }
             return await GetList();
         }
@@ -89,7 +105,7 @@ namespace ScriptGraphicHelper.Models.ScreenshotHelpers
                     }
                 }
                 FileStream stream = new(fullName, FileMode.Open, FileAccess.Read);
-                var bitmap = new Bitmap(stream);
+                var bitmap = new Avalonia.Media.Imaging.Bitmap(stream);
                 stream.Position = 0;
                 var sKBitmap = SKBitmap.Decode(stream);
                 GraphicHelper.KeepScreen(sKBitmap);

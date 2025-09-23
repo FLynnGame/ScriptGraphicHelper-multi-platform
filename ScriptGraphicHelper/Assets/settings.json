@@ -104,5 +104,9 @@
     "modeSelectedIndex": 0,
     "threshold": 12,
     "size": -1
+  },
+  "adbConfig": {
+    "address": "192.168.",
+    "port": 0
   }
 }

@@ -36,6 +36,8 @@ namespace ScriptGraphicHelper.Models
         public List<FormatConfig>? Formats { get; set; }
         [JsonProperty("imgEditor")]
         public ImgEditorConfig ImgEditor { get; set; } = new ImgEditorConfig();
+        [JsonProperty("adbConfig")]
+        public AdbSettingsConfig AdbConfig { get; set; } = new AdbSettingsConfig();
     }
 
     public class FormatConfig
@@ -191,5 +193,13 @@ namespace ScriptGraphicHelper.Models
         public int Threshold { get; set; } = 12;
         [JsonProperty("size")]
         public int Size { get; set; } = -1;
+    }
+
+    public class AdbSettingsConfig
+    {
+        [JsonProperty("address")]
+        public string AdbAddress { get; set; } = "192.168.";
+        [JsonProperty("port")]
+        public int AdbPort { get; set; } = 5;
     }
 }

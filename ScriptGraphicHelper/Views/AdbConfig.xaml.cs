@@ -2,7 +2,10 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
+using Newtonsoft.Json;
+using ScriptGraphicHelper.Models;
 using System;
+using System.IO;
 
 namespace ScriptGraphicHelper.Views
 {
@@ -23,7 +26,10 @@ namespace ScriptGraphicHelper.Views
 
         private void WindowOpened(object sender, EventArgs e)
         {
-            this.FindControl<TextBox>("Address").Text = LastAddress ?? "192.168.";
+            var address = Settings.Instance.AdbConfig.AdbAddress;
+            this.FindControl<TextBox>("Address").Text = address ?? "192.168.";
+            var port = Settings.Instance.AdbConfig.AdbPort;
+            this.FindControl<TextBox>("Port").Text = port.ToString();
         }
 
         private void Ok_Tapped(object sender, RoutedEventArgs e)
@@ -31,6 +37,13 @@ namespace ScriptGraphicHelper.Views
             var address = this.FindControl<TextBox>("Address").Text.Trim();
             LastAddress = address;
             var port = int.Parse(this.FindControl<TextBox>("Port").Text.Trim());
+
+            // 缓存上次的地址和端口
+            Settings.Instance.AdbConfig.AdbAddress = address;
+            Settings.Instance.AdbConfig.AdbPort = port;
+            var settingStr = JsonConvert.SerializeObject(Settings.Instance, Formatting.Indented);
+            File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + @"assets\settings.json", settingStr);
+
             Close((address, port));
         }
 
