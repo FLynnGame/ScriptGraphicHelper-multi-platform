@@ -38,7 +38,7 @@ namespace ScriptGraphicHelper.Views
             LastAddress = address;
             var port = int.Parse(this.FindControl<TextBox>("Port").Text.Trim());
 
-            // �����ϴεĵ�ַ�Ͷ˿�
+            // 缓存上次的地址和端口
             Settings.Instance.AdbConfig.AdbAddress = address;
             Settings.Instance.AdbConfig.AdbPort = port;
             var settingStr = JsonConvert.SerializeObject(Settings.Instance, Formatting.Indented);

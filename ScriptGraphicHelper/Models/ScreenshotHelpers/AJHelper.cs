@@ -37,6 +37,8 @@ namespace ScriptGraphicHelper.Models.ScreenshotHelpers
         public override string Name { get; } = "AJ连接";
         public override Action<Bitmap>? OnSuccessed { get; set; }
         public override Action<string>? OnFailed { get; set; }
+        public override Action<string>? OnConnected { get; set; }
+        public override Action<string>? OnConnectFailed { get; set; }
 
         public string LocalIP { get; set; } = string.Empty;
 
@@ -257,7 +259,7 @@ namespace ScriptGraphicHelper.Models.ScreenshotHelpers
             try
             {
                 this.server?.Server.Close();
-                this.server.Stop();
+                this.server?.Stop();
                 this.client?.Close();
                 this.client?.Dispose();
             }

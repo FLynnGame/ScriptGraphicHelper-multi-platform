@@ -16,6 +16,8 @@ namespace ScriptGraphicHelper.Models.ScreenshotHelpers
         public override Action<string>? OnFailed { get; set; }
         public override string Path { get; } = "大漠句柄";
         public override string Name { get; } = "大漠句柄";
+        public override Action<string>? OnConnected { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public override Action<string>? OnConnectFailed { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         private bool Inited = false;
 

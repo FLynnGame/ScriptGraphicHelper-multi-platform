@@ -205,18 +205,22 @@ namespace ScriptGraphicHelper.ViewModels
 
         public ICommand Img_PointerLeave => new Command((param) => this.Loupe_IsVisible = false);
 
-        // µã»÷Ä£Ê½ÅäÖÃ£¬Ê×ÏÈÕâÀï´¥·¢
+        // ç‚¹å‡»æ¨¡å¼é…ç½®ï¼Œé¦–å…ˆè¿™é‡Œè§¦å‘
         public ICommand GetList => new Command(async (param) =>
         {
             if (ScreenshotHelperBridge.Select != -1)
             {
-                //var list = await ScreenshotHelperBridge.Helpers[ScreenshotHelperBridge.Select].GetList();
-                //var temp = new ObservableCollection<string>();
-                //foreach (var item in list)
-                //{
-                //    temp.Add(item.Value);
-                //}
-                //ScreenshotHelperBridge.Info = list;
+                var list = await ScreenshotHelperBridge.Helpers[ScreenshotHelperBridge.Select].GetList();
+                var temp = new ObservableCollection<string>();
+                foreach (var item in list)
+                {
+                    temp.Add(item.Value);
+                }
+                ScreenshotHelperBridge.Info = list;
+                this.EmulatorInfo = temp;
+            }
+            else
+            {
                 this.EmulatorInfo = ScreenshotHelperBridge.Init();
             }
         });
@@ -232,9 +236,9 @@ namespace ScriptGraphicHelper.ViewModels
                 else if (ScreenshotHelperBridge.State == LinkState.Waiting)
                 {
                     this.WindowCursor = new Cursor(StandardCursorType.Wait);
-                    ScreenshotHelperBridge.Changed(value); // ÇĞ»»×´Ì¬ÎªLinkState.Starting
-                    this.EmulatorInfo = await ScreenshotHelperBridge.Initialize();
-                    this.EmulatorSelectedIndex = -1; // µ÷ÓÃ×Ô¼º£¬ÇĞ»»×´Ì¬Îªsuccess£¿
+                    ScreenshotHelperBridge.Changed(value); // åˆ‡æ¢çŠ¶æ€ä¸ºLinkState.Starting
+                    this.EmulatorInfo = await ScreenshotHelperBridge.StartConnect();
+                    
 
                     ScreenshotHelperBridge.Helpers[ScreenshotHelperBridge.Select].OnSuccessed = new Action<Bitmap>((bitmap) =>
                     {
@@ -258,11 +262,25 @@ namespace ScriptGraphicHelper.ViewModels
                         this.WindowCursor = new Cursor(StandardCursorType.Arrow);
                     });
 
+                    ScreenshotHelperBridge.Helpers[ScreenshotHelperBridge.Select].OnConnected = new Action<string>((message) =>
+                    {
+                        // è¿æ¥æˆåŠŸ
+                        //MessageBox.ShowAsync(message);
+                        this.WindowCursor = new Cursor(StandardCursorType.Arrow);
+                    });
+                    ScreenshotHelperBridge.Helpers[ScreenshotHelperBridge.Select].OnConnectFailed = new Action<string>((errorMessage) =>
+                    {
+                        // è¿æ¥å¤±è´¥
+                        this.EmulatorInfo.Clear();
+                        this.EmulatorInfo = ScreenshotHelperBridge.Init();
+                    });
+
+                    this.EmulatorSelectedIndex = -1; // è°ƒç”¨è‡ªå·±ï¼Œåˆ‡æ¢çŠ¶æ€ä¸ºsuccessï¼Ÿ
                 }
                 else if (ScreenshotHelperBridge.State == LinkState.Starting)
                 {
                     ScreenshotHelperBridge.State = LinkState.success;
-                    this.EmulatorSelectedIndex = 0; // ÏÈĞ´ËÀ»ñÈ¡µÚÒ»¸öÁ´½Ó
+                    this.EmulatorSelectedIndex = 0; // å…ˆå†™æ­»è·å–ç¬¬ä¸€ä¸ªé“¾æ¥
                 }
             }
             catch (Exception e)
@@ -286,7 +304,7 @@ namespace ScriptGraphicHelper.ViewModels
                     || ScreenshotHelperBridge.Index == -1 ||
                     ScreenshotHelperBridge.Info[ScreenshotHelperBridge.Index].Value == "null")
                 {
-                    MessageBox.ShowAsync("ÇëÏÈÅäÖÃ -> (Ä£ÄâÆ÷/tcp/¾ä±ú)");
+                    MessageBox.ShowAsync("è¯·å…ˆé…ç½® -> (æ¨¡æ‹Ÿå™¨/tcp/å¥æŸ„)");
                     this.WindowCursor = new Cursor(StandardCursorType.Arrow);
                     return;
                 }
@@ -364,12 +382,12 @@ namespace ScriptGraphicHelper.ViewModels
                     OpenFileName ofn = new();
                     ofn.hwnd = MainWindow.Instance.Handle;
                     ofn.structSize = Marshal.SizeOf(ofn);
-                    ofn.filter = "Î»Í¼ÎÄ¼ş (*.png;*.bmp;*.jpg)\0*.png;*.bmp;*.jpg\0";
+                    ofn.filter = "ä½å›¾æ–‡ä»¶ (*.png;*.bmp;*.jpg)\0*.png;*.bmp;*.jpg\0";
                     ofn.file = new string(new char[256]);
                     ofn.maxFile = ofn.file.Length;
                     ofn.fileTitle = new string(new char[64]);
                     ofn.maxFileTitle = ofn.fileTitle.Length;
-                    ofn.title = "ÇëÑ¡ÔñÎÄ¼ş";
+                    ofn.title = "è¯·é€‰æ‹©æ–‡ä»¶";
 
                     if (NativeApi.GetOpenFileName(ofn))
                     {
@@ -380,13 +398,13 @@ namespace ScriptGraphicHelper.ViewModels
                 {
                     var dlg = new OpenFileDialog
                     {
-                        Title = "ÇëÑ¡ÔñÎÄ¼ş",
+                        Title = "è¯·é€‰æ‹©æ–‡ä»¶",
                         AllowMultiple = false,
                         Filters = new List<FileDialogFilter>
                         {
                             new FileDialogFilter
                             {
-                                Name = "Î»Í¼ÎÄ¼ş",
+                                Name = "ä½å›¾æ–‡ä»¶",
                                 Extensions = new List<string>()
                                 {
                                 "png",
@@ -445,12 +463,12 @@ namespace ScriptGraphicHelper.ViewModels
 
                     ofn.hwnd = MainWindow.Instance.Handle;
                     ofn.structSize = Marshal.SizeOf(ofn);
-                    ofn.filter = "Î»Í¼ÎÄ¼ş (*.png;*.bmp;*.jpg)\0*.png;*.bmp;*.jpg\0";
+                    ofn.filter = "ä½å›¾æ–‡ä»¶ (*.png;*.bmp;*.jpg)\0*.png;*.bmp;*.jpg\0";
                     ofn.file = new string(new char[256]);
                     ofn.maxFile = ofn.file.Length;
                     ofn.fileTitle = new string(new char[64]);
                     ofn.maxFileTitle = ofn.fileTitle.Length;
-                    ofn.title = "±£´æÎÄ¼ş";
+                    ofn.title = "ä¿å­˜æ–‡ä»¶";
                     ofn.defExt = ".png";
                     if (NativeApi.GetSaveFileName(ofn))
                     {
@@ -462,12 +480,12 @@ namespace ScriptGraphicHelper.ViewModels
                     var dlg = new SaveFileDialog
                     {
                         InitialFileName = "Screen_" + DateTime.Now.ToString("yy-MM-dd-HH-mm-ss"),
-                        Title = "±£´æÎÄ¼ş",
+                        Title = "ä¿å­˜æ–‡ä»¶",
                         Filters = new List<FileDialogFilter>
                         {
                             new FileDialogFilter
                             {
-                                Name = "Î»Í¼ÎÄ¼ş",
+                                Name = "ä½å›¾æ–‡ä»¶",
                                 Extensions = new List<string>()
                                 {
                                     "png",
@@ -523,7 +541,7 @@ namespace ScriptGraphicHelper.ViewModels
                 {
                     if (colorInfos.Count < 2)
                     {
-                        MessageBox.ShowAsync("´íÎó", "¶àµãÕÒÉ«ÖÁÉÙĞèÒª¹´Ñ¡Á½¸öÑÕÉ«²Å¿É½øĞĞ²âÊÔ!");
+                        MessageBox.ShowAsync("é”™è¯¯", "å¤šç‚¹æ‰¾è‰²è‡³å°‘éœ€è¦å‹¾é€‰ä¸¤ä¸ªé¢œè‰²æ‰å¯è¿›è¡Œæµ‹è¯•!");
                         this.TestResult = "error";
                         return;
                     }
@@ -587,7 +605,7 @@ namespace ScriptGraphicHelper.ViewModels
             }
             catch (Exception ex)
             {
-                MessageBox.ShowAsync("ÉèÖÃ¼ôÌù°åÊ§°Ü , ÄãµÄ¼ôÌù°å¿ÉÄÜ±»ÆäËûÈí¼şÕ¼ÓÃ\r\n\r\n" + ex.Message, "error");
+                MessageBox.ShowAsync("è®¾ç½®å‰ªè´´æ¿å¤±è´¥ , ä½ çš„å‰ªè´´æ¿å¯èƒ½è¢«å…¶ä»–è½¯ä»¶å ç”¨\r\n\r\n" + ex.Message, "error");
             }
         }
 
@@ -796,7 +814,7 @@ namespace ScriptGraphicHelper.ViewModels
             }
             catch (Exception ex)
             {
-                MessageBox.ShowAsync("ÉèÖÃ¼ôÌù°åÊ§°Ü , ÄãµÄ¼ôÌù°å¿ÉÄÜ±»ÆäËûÈí¼şÕ¼ÓÃ\r\n\r\n" + ex.Message, "error");
+                MessageBox.ShowAsync("è®¾ç½®å‰ªè´´æ¿å¤±è´¥ , ä½ çš„å‰ªè´´æ¿å¯èƒ½è¢«å…¶ä»–è½¯ä»¶å ç”¨\r\n\r\n" + ex.Message, "error");
             }
         }
 
@@ -819,7 +837,7 @@ namespace ScriptGraphicHelper.ViewModels
             }
             catch (Exception ex)
             {
-                MessageBox.ShowAsync("ÉèÖÃ¼ôÌù°åÊ§°Ü\r\n\r\n" + ex.Message, "´íÎó");
+                MessageBox.ShowAsync("è®¾ç½®å‰ªè´´æ¿å¤±è´¥\r\n\r\n" + ex.Message, "é”™è¯¯");
             }
         }
 
@@ -837,7 +855,7 @@ namespace ScriptGraphicHelper.ViewModels
             }
             catch (Exception ex)
             {
-                MessageBox.ShowAsync("ÉèÖÃ¼ôÌù°åÊ§°Ü\r\n\r\n" + ex.Message, "´íÎó");
+                MessageBox.ShowAsync("è®¾ç½®å‰ªè´´æ¿å¤±è´¥\r\n\r\n" + ex.Message, "é”™è¯¯");
             }
         }
 

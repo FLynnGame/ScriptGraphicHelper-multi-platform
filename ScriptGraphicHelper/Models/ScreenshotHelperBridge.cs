@@ -48,6 +48,7 @@ namespace ScriptGraphicHelper.Models
             }
         }
 
+        // Init函数，默认返回所有的连接方式
         public static List<BaseHelper> Helpers = new();
         public static ObservableCollection<string> Init()
         {
@@ -119,7 +120,9 @@ namespace ScriptGraphicHelper.Models
                 State = LinkState.Starting;
             }
         }
-        public static async Task<ObservableCollection<string>> Initialize()
+
+        // 返回连接串信息
+        public static async Task<ObservableCollection<string>> StartConnect()
         {
             ObservableCollection<string> result = new();
             Info = await Helpers[Select].Initialize();

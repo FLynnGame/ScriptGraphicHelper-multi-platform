@@ -42,14 +42,14 @@ namespace ScriptGraphicHelper.Views
 
         private void Window_Opened(object sender, EventArgs e)
         {
-            // ÃÌº”ø’÷µºÏ≤È
+            // Ê∑ªÂä†Á©∫ÂÄºÊ£ÄÊü•
             //if (this.DataContext is MainWindowViewModel viewModel && viewModel.DropImage_Event != null)
             {
                // AddHandler(DragDrop.DropEvent, viewModel.DropImage_Event);
             }
             AddHandler(DragDrop.DropEvent, (this.DataContext as MainWindowViewModel).DropImage_Event);
 
-            // »∑±£ PlatformImpl ≤ªŒ™ null
+            // Á°Æ‰øù PlatformImpl ‰∏ç‰∏∫ null
             if (this.PlatformImpl?.Handle == null)
                 return;
             this.Handle = this.PlatformImpl.Handle.Handle;

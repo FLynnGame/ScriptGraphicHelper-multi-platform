@@ -20,6 +20,8 @@ namespace ScriptGraphicHelper.Models.ScreenshotHelpers
         public override string Name { get; } = "AT连接";
         public override Action<Bitmap>? OnSuccessed { get; set; }
         public override Action<string>? OnFailed { get; set; }
+        public override Action<string>? OnConnected { get; set; }
+        public override Action<string>? OnConnectFailed { get; set; }
 
         private IMqttClient? client;
 

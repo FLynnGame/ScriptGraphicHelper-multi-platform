@@ -18,6 +18,9 @@ namespace ScriptGraphicHelper.Models.ScreenshotHelpers
         public override string Path { get; } = string.Empty;
         public override string Name { get; } = string.Empty;
         public string BmpPath { get; set; } = string.Empty;
+        public override Action<string>? OnConnected { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public override Action<string>? OnConnectFailed { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
         public LdEmulatorHelper(int version)//初始化 , 获取雷电模拟器路径
         {
             try

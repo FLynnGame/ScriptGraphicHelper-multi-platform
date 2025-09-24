@@ -1,4 +1,4 @@
-﻿using Avalonia;
+using Avalonia;
 using Avalonia.Input;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
@@ -36,6 +36,7 @@ namespace ScriptGraphicHelper.ViewModels
             set => this.RaiseAndSetIfChanged(ref this.windowHeight, value);
         }
 
+        // 主页模拟器选择下标，设置后会调用函数Emulator_Selected
         private int emulatorSelectedIndex = 0;
         public int EmulatorSelectedIndex
         {
@@ -79,6 +80,7 @@ namespace ScriptGraphicHelper.ViewModels
             set => this.RaiseAndSetIfChanged(ref this.createStr, value);
         }
 
+        // 主界面显示当前选中的是哪个连接方式
         private ObservableCollection<string> emulatorInfo;
         public ObservableCollection<string> EmulatorInfo
         {

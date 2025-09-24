@@ -9,6 +9,8 @@ namespace ScriptGraphicHelper.Models.ScreenshotHelpers
     {
         public abstract Action<Bitmap>? OnSuccessed { get; set; }
         public abstract Action<string>? OnFailed { get; set; }
+        public abstract Action<string>? OnConnected { get; set; } // 连接成功
+        public abstract Action<string>? OnConnectFailed { get; set; } // 连接失败
         public abstract string Path { get; }
         public abstract string Name { get; }
         public abstract bool IsStart(int Index);
